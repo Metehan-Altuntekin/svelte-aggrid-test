@@ -6,6 +6,9 @@
   import { onMount } from "svelte";
 
   import Modal from "../components/modal.svelte";
+  import ButtonCell from "../components/buttonCell";
+
+  // customElements.define("button-cell", ButtonCell);
 
   // Modal
 
@@ -17,46 +20,14 @@
 
   // Button
 
-  class BtnCellRenderer {
-    init(params) {
-      this.params = params;
-
-      console.log(params);
-
-      this.eGui = document.createElement("button");
-      this.eGui.innerHTML = "Button One";
-
-      this.btnClickedHandler = this.btnClickedHandler.bind(this);
-      this.eGui.addEventListener("click", this.btnClickedHandler);
-    }
-
-    getGui() {
-      return this.eGui;
-    }
-
-    btnClickedHandler(event) {
+  // ButtonCell is a class that AG-Grid needs to render the cell
+  // We need to extend the class to add our own functionality to it
+  class BtnCellRenderer extends ButtonCell {
+    btnClickHandler(event) {
       modalOptions = {
         open: true,
         message: this.params.value,
         position: "left",
-      };
-    }
-
-    destroy() {
-      this.eGui.removeEventListener("click", this.btnClickedHandler);
-    }
-  }
-
-  class BtnCellRenderer2 extends BtnCellRenderer {
-    init(params) {
-      super.init(params);
-      this.eGui.innerHTML = "Button Two";
-    }
-    btnClickedHandler(event) {
-      modalOptions = {
-        open: true,
-        message: this.params.value,
-        position: "right",
       };
     }
   }
@@ -77,7 +48,7 @@
       {
         headerName: "Button One",
         field: "make",
-        cellRenderer: BtnCellRenderer,
+        cellRenderer: BtnCellRenderer, // example with customizing
         cellRendererParams: {
           clicked: function (field) {
             alert(`${field} was clicked`);
@@ -87,7 +58,7 @@
       {
         headerName: "Button Two",
         field: "model",
-        cellRenderer: BtnCellRenderer2,
+        cellRenderer: ButtonCell, // example without customizing
         cellRendererParams: {
           clicked: function (field) {
             alert(`${field} was clicked`);
@@ -116,17 +87,13 @@
 
 <svelte:head />
 
-<div
-  bind:this={eGridDiv}
-  id="myGrid"
-  style="width: 100%; height: 200px !important;"
-  class="ag-theme-alpine"
-/>
+<div bind:this={eGridDiv} id="myGrid" class="ag-theme-alpine" />
 
 <Modal {modalOptions} />
 
 <style>
-  /* :global(.ag-header-cell) {
-    background-color: aqua;
-  } */
+  #myGrid {
+    width: 100%;
+    height: 500px;
+  }
 </style>

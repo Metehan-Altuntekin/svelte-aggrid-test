@@ -7,6 +7,7 @@
 
   import Modal from "../components/modal.svelte";
 
+  // Modal
 
   let modalOptions = {
     open: false,
@@ -14,6 +15,7 @@
     position: "left",
   };
 
+  // Button
 
   class BtnCellRenderer {
     init(params) {
@@ -58,6 +60,8 @@
       };
     }
   }
+
+  // Grid
 
   var gridOptions = {
     defaultColDef: {

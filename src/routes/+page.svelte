@@ -5,6 +5,39 @@
 
   import { onMount } from "svelte";
 
+  class BtnCellRenderer {
+    init(params) {
+      this.params = params;
+
+      console.log(params);
+
+      this.eGui = document.createElement("button");
+      this.eGui.innerHTML = "Button One";
+
+      this.btnClickedHandler = this.btnClickedHandler.bind(this);
+      this.eGui.addEventListener("click", this.btnClickedHandler);
+    }
+
+    getGui() {
+      return this.eGui;
+    }
+
+    btnClickedHandler(event) {
+      this.params.clicked(this.params.value);
+    }
+
+    destroy() {
+      this.eGui.removeEventListener("click", this.btnClickedHandler);
+    }
+  }
+
+  class BtnCellRenderer2 extends BtnCellRenderer {
+    init(params) {
+      super.init(params);
+      this.eGui.innerHTML = "Button Two";
+    }
+  }
+
   var gridOptions = {
     defaultColDef: {
       sortable: true,
@@ -16,6 +49,26 @@
       { headerName: "Make", field: "make" },
       { headerName: "Model", field: "model" },
       { headerName: "Price", field: "price" },
+      {
+        headerName: "Button One",
+        field: "make",
+        cellRenderer: BtnCellRenderer,
+        cellRendererParams: {
+          clicked: function (field) {
+            alert(`${field} was clicked`);
+          },
+        },
+      },
+      {
+        headerName: "Button Two",
+        field: "model",
+        cellRenderer: BtnCellRenderer2,
+        cellRendererParams: {
+          clicked: function (field) {
+            alert(`${field} was clicked`);
+          },
+        },
+      },
     ],
     rowData: [
       { make: "Toyota", model: "Celica", price: 35000 },

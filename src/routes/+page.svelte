@@ -120,6 +120,7 @@
   bind:this={eGridDiv}
   id="myGrid"
   style="width: 100%; height: 200px !important;"
+  class="ag-theme-alpine"
 />
 
 <Modal {modalOptions} />

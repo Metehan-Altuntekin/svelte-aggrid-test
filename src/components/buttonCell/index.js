@@ -10,7 +10,13 @@ export default class ButtonCell {
   init(params) {
     this.params = params;
 
+    // If a buttonClickHandler is passed in to cellRendererParams, use it
+    if (params.buttonClickHandler)
+      this.buttonClickHandler = params.buttonClickHandler;
+
+    // Create a div to render the component into
     this.eGui = document.createElement("div");
+    // Add a class to the div to style it from component
     this.eGui.classList.add("button-cell");
 
     // Render the component into the div
@@ -18,7 +24,7 @@ export default class ButtonCell {
       target: this.eGui,
       props: {
         onclick: () => {
-          this.btnClickHandler();
+          this.buttonClickHandler();
         },
       },
     });
@@ -28,7 +34,7 @@ export default class ButtonCell {
     return this.eGui;
   }
 
-  btnClickHandler(event) {
+  buttonClickHandler() {
     console.log("Button clicked");
   }
 }

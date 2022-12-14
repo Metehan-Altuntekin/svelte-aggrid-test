@@ -18,20 +18,6 @@
     position: "left",
   };
 
-  // Button
-
-  // ButtonCell is a class that AG-Grid needs to render the cell
-  // We need to extend the class to add our own functionality to it
-  class BtnCellRenderer extends ButtonCell {
-    btnClickHandler(event) {
-      modalOptions = {
-        open: true,
-        message: this.params.value,
-        position: "left",
-      };
-    }
-  }
-
   // Grid
 
   var gridOptions = {
@@ -48,20 +34,29 @@
       {
         headerName: "Button One",
         field: "make",
-        cellRenderer: BtnCellRenderer, // example with customizing
+        cellRenderer: ButtonCell,
         cellRendererParams: {
-          clicked: function (field) {
-            alert(`${field} was clicked`);
+          buttonClickHandler() {
+            console.log("this", this);
+            modalOptions = {
+              open: true,
+              message: this.params.value,
+              position: "left",
+            };
           },
         },
       },
       {
         headerName: "Button Two",
         field: "model",
-        cellRenderer: ButtonCell, // example without customizing
+        cellRenderer: ButtonCell,
         cellRendererParams: {
-          clicked: function (field) {
-            alert(`${field} was clicked`);
+          buttonClickHandler() {
+            modalOptions = {
+              open: true,
+              message: this.params.value,
+              position: "right",
+            };
           },
         },
       },

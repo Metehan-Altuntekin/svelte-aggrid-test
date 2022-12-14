@@ -5,6 +5,16 @@
 
   import { onMount } from "svelte";
 
+  import Modal from "../components/modal.svelte";
+
+
+  let modalOptions = {
+    open: false,
+    message: undefined,
+    position: "left",
+  };
+
+
   class BtnCellRenderer {
     init(params) {
       this.params = params;
@@ -23,7 +33,11 @@
     }
 
     btnClickedHandler(event) {
-      this.params.clicked(this.params.value);
+      modalOptions = {
+        open: true,
+        message: this.params.value,
+        position: "left",
+      };
     }
 
     destroy() {
@@ -35,6 +49,13 @@
     init(params) {
       super.init(params);
       this.eGui.innerHTML = "Button Two";
+    }
+    btnClickedHandler(event) {
+      modalOptions = {
+        open: true,
+        message: this.params.value,
+        position: "right",
+      };
     }
   }
 
@@ -85,6 +106,8 @@
   onMount(() => {
     new Grid(eGridDiv, gridOptions);
   });
+
+  $: console.log(modalOptions);
 </script>
 
 <svelte:head />
@@ -94,6 +117,8 @@
   id="myGrid"
   style="width: 100%; height: 200px !important;"
 />
+
+<Modal {modalOptions} />
 
 <style>
   /* :global(.ag-header-cell) {

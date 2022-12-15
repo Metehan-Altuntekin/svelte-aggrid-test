@@ -1,22 +1,27 @@
 <script>
   export let modalOptions = {
-    open: false,
     message: undefined,
-    position: "left",
+    position: {
+      from: "left",
+      top: 0,
+      left: 0,
+      height: 0,
+      width: 0,
+    },
   };
 
-  $: open = modalOptions.open;
   $: message = modalOptions.message;
   $: position = modalOptions.position;
 
   $: console.log("modal", modalOptions);
 </script>
 
-{#if open}
-  <div class={position === "left" ? "left" : "right"}>
-    <h1>{message}</h1>
-  </div>
-{/if}
+<div
+  style="--top:{position.top}px;  --left: {position.left}px; --container-width: {position.width}px; --container-height: {position.height}px;"
+  class="from-{position.from}"
+>
+  <h1>{message}</h1>
+</div>
 
 <style>
   div {
@@ -27,15 +32,26 @@
     width: 200px;
     height: 200px;
 
-    position: fixed;
-    top: 100px;
-    left: 100px;
+    position: absolute;
+
+    left: var(--left);
+    top: var(--top);
   }
-  div.left {
-    left: 100px;
+
+  /* Adjust the position of the modal based on the position.from prop */
+  div.from-left {
+    transform: translateX(calc(var(--container-width) * -1));
   }
-  div.right {
-    right: 100px;
-    left: unset;
+
+  div.from-right {
+    transform: translateX(calc(var(--container-width)));
+  }
+
+  div.from-top {
+    transform: translateY(-100%);
+  }
+
+  div.from-bottom {
+    transform: translateY(calc(var(--container-height)));
   }
 </style>

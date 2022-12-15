@@ -5,18 +5,7 @@
 
   import { onMount } from "svelte";
 
-  import Modal from "../components/modal.svelte";
   import ButtonCell from "../components/buttonCell";
-
-  // customElements.define("button-cell", ButtonCell);
-
-  // Modal
-
-  let modalOptions = {
-    open: false,
-    message: undefined,
-    position: "left",
-  };
 
   // Grid
 
@@ -35,30 +24,7 @@
         headerName: "Button One",
         field: "make",
         cellRenderer: ButtonCell,
-        cellRendererParams: {
-          buttonClickHandler() {
-            console.log("this", this);
-            modalOptions = {
-              open: true,
-              message: this.params.value,
-              position: "left",
-            };
-          },
-        },
-      },
-      {
-        headerName: "Button Two",
-        field: "model",
-        cellRenderer: ButtonCell,
-        cellRendererParams: {
-          buttonClickHandler() {
-            modalOptions = {
-              open: true,
-              message: this.params.value,
-              position: "right",
-            };
-          },
-        },
+        width: 250, // Has to be set to make the buttons visible
       },
     ],
     rowData: [
@@ -75,16 +41,15 @@
 
   onMount(() => {
     new Grid(eGridDiv, gridOptions);
-  });
 
-  $: console.log(modalOptions);
+    gridOptions.api.sizeColumnsToFit(); // resize columns to fit the grid width
+
+    // resize again if the window is resized
+    window.addEventListener("resize", () => gridOptions.api.sizeColumnsToFit());
+  });
 </script>
 
-<svelte:head />
-
 <div bind:this={eGridDiv} id="myGrid" class="ag-theme-alpine" />
-
-<Modal {modalOptions} />
 
 <style>
   #myGrid {
